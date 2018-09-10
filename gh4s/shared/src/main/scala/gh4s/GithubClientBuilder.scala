@@ -21,7 +21,7 @@ object GithubClientBuilder {
 final private[gh4s] case class GithubClientBuilderConfig(
     authenticator: Authenticator,
     owner: Option[String] = None,
-    apiUrl: String = "https://api.github.com",
+    apiUrl: String = "https://api.github.com"
 )
 
 class GithubClientBuilder private[gh4s] (configBuilder: GithubClientBuilderConfig) {

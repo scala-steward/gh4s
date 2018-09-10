@@ -16,7 +16,7 @@ lazy val crossCompilationSettings = Seq(
   },
   libraryDependencies ++= {
     if (priorTo2_13(scalaVersion.value))
-      Seq(compilerPlugin("org.scalamacros" % "paradise" % "2.1.1").cross(CrossVersion.patch))
+      Seq(compilerPlugin(("org.scalamacros" % "paradise" % "2.1.1").cross(CrossVersion.full)))
     else
       Seq.empty
   }
@@ -24,7 +24,7 @@ lazy val crossCompilationSettings = Seq(
 
 lazy val sharedSettings = crossCompilationSettings ++ Seq(
   scalaVersion := "2.12.6",
-//  crossScalaVersions ++= Seq(/*, "2.13.0-M4"*/),
+  crossScalaVersions ++= Seq("2.11.12" /*, "2.13.0-M4"*/ ),
   scalacOptions ++= Seq(
     "-deprecation",
     "-encoding",
@@ -43,8 +43,9 @@ lazy val sharedSettings = crossCompilationSettings ++ Seq(
   scalafmtOnCompile := true,
   wartremoverErrors in (Compile, compile) := Warts.allBut(
     Wart.DefaultArguments,
+    Wart.ExplicitImplicitTypes,
+    Wart.Nothing,
     Wart.PublicInference,
-    Wart.Nothing
   ),
   wartremoverErrors in (Test, compile) := (wartremoverErrors in (Compile, compile)).value.diff(
     Seq(
