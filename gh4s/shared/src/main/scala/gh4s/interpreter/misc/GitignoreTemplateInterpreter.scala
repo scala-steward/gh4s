@@ -9,8 +9,8 @@ import gh4s.http.RequestRunner
 import gh4s.model.{GitignoreTemplate, GitignoreTemplateName}
 
 object GitignoreTemplateInterpreter {
-  def apply[F[_]](config: GithubClientConfig)(implicit F: Sync[F],
-                                              backend: SttpBackend[F, Nothing]): GitignoreTemplatesAlgebra[F] =
+  def apply[F[_]](config: GithubClientConfig[_])(implicit F: Sync[F],
+                                                 backend: SttpBackend[F, Nothing]): GitignoreTemplatesAlgebra[F] =
     new GitignoreTemplatesAlgebra[F] {
       override def fetchAll: F[Seq[GitignoreTemplateName]] =
         RequestRunner.asJson[F, Seq[GitignoreTemplateName]](sttp.get(uri"${config.apiUrl}/gitignore/templates"), config)

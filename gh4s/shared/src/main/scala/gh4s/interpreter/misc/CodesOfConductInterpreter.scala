@@ -9,8 +9,8 @@ import gh4s.http.{MediaType, RequestRunner}
 import gh4s.model.{CodeOfConduct, CodeOfConductDescription}
 
 object CodesOfConductInterpreter {
-  def apply[F[_]](config: GithubClientConfig)(implicit F: Sync[F],
-                                              backend: SttpBackend[F, Nothing]): CodesOfConductAlgebra[F] =
+  def apply[F[_]](config: GithubClientConfig[_])(implicit F: Sync[F],
+                                                 backend: SttpBackend[F, Nothing]): CodesOfConductAlgebra[F] =
     new CodesOfConductAlgebra[F] {
 
       override def fetchAll: F[Seq[CodeOfConductDescription]] =

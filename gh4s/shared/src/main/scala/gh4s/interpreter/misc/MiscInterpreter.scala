@@ -6,7 +6,7 @@ import gh4s.GithubClientConfig
 import gh4s.algebra.misc._
 
 object MiscInterpreter {
-  def apply[F[_], T](config: GithubClientConfig)(implicit F: Sync[F],
+  def apply[F[_]](config: GithubClientConfig[_])(implicit F: Sync[F],
                                                  backend: SttpBackend[F, Nothing]): MiscAlgebra[F] =
     new MiscAlgebra[F] {
       override val codesOfConduct: CodesOfConductAlgebra[F]         = CodesOfConductInterpreter(config)
