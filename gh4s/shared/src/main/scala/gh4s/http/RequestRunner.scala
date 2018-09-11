@@ -14,7 +14,7 @@ object RequestRunner {
 
   def asJsonK[F[_], C[_], T](
       request: Request[String, Nothing],
-      config: GithubClientConfig,
+      config: GithubClientConfig[_],
       mediaType: MediaType = MediaType.Default
   )(implicit F: Sync[F], C: MonoidK[C], D: Decoder[C[T]], backend: SttpBackend[F, Nothing]): F[C[T]] =
     F.flatMap(prepare(request, config, mediaType).response(sttpAsJson[C[T]]).send()) { response =>
@@ -29,7 +29,7 @@ object RequestRunner {
 
   def asJson[F[_], T: Decoder](
       request: Request[String, Nothing],
-      config: GithubClientConfig,
+      config: GithubClientConfig[_],
       mediaType: MediaType = MediaType.Default)(implicit F: Sync[F], backend: SttpBackend[F, Nothing]): F[T] =
     F.flatMap(prepare(request, config, mediaType).response(sttpAsJson[T]).send()) { response =>
       response.body.fold(
@@ -41,11 +41,11 @@ object RequestRunner {
       )
     }
 
-  def resolveOwner[F[_]](owner: Option[String], config: GithubClientConfig)(implicit F: Sync[F]): F[String] =
+  def resolveOwner[F[_]](owner: Option[String], config: GithubClientConfig[_])(implicit F: Sync[F]): F[String] =
     owner.orElse(config.owner).map(F.pure).getOrElse(F.raiseError(ownerMissingException))
 
   private def prepare(request: Request[String, Nothing],
-                      config: GithubClientConfig,
+                      config: GithubClientConfig[_],
                       mediaType: MediaType): Request[String, Nothing] = {
     val pipeline = config.authenticator.andThen(mediaType.applyHeader)
     pipeline(request)

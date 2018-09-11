@@ -9,8 +9,8 @@ import gh4s.http.RequestRunner
 import gh4s.model.{License, LicenseDescription, RepositoryLicense}
 
 object LicensesInterpreter {
-  def apply[F[_]](config: GithubClientConfig)(implicit F: Sync[F],
-                                              backend: SttpBackend[F, Nothing]): LicensesAlgebra[F] =
+  def apply[F[_]](config: GithubClientConfig[_])(implicit F: Sync[F],
+                                                 backend: SttpBackend[F, Nothing]): LicensesAlgebra[F] =
     new LicensesAlgebra[F] {
       override def fetchAll: F[Seq[LicenseDescription]] =
         RequestRunner.asJson[F, Seq[LicenseDescription]](sttp.get(uri"${config.apiUrl}/licenses"), config)

@@ -8,8 +8,8 @@ import gh4s.http.RequestRunner
 import gh4s.model.RateLimit
 
 object RateLimitInterpreter {
-  def apply[F[_]](config: GithubClientConfig)(implicit F: Sync[F],
-                                              backend: SttpBackend[F, Nothing]): RateLimitAlgebra[F] =
+  def apply[F[_]](config: GithubClientConfig[_])(implicit F: Sync[F],
+                                                 backend: SttpBackend[F, Nothing]): RateLimitAlgebra[F] =
     new RateLimitAlgebra[F] {
       override def fetch: F[RateLimit] =
         RequestRunner.asJson[F, RateLimit](sttp.get(uri"${config.apiUrl}/rate_limit"), config)
