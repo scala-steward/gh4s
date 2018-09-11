@@ -37,7 +37,6 @@ lazy val sharedSettings = crossCompilationSettings ++ Seq(
     "-Ywarn-dead-code",
     "-Ywarn-numeric-widen",
     "-Xfuture",
-    "-Yno-predef",
     "-Ywarn-unused-import"
   ),
   scalafmtOnCompile := true,
