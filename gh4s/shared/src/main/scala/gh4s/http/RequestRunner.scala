@@ -3,9 +3,9 @@ package gh4s.http
 import cats.MonoidK
 import cats.effect.Sync
 import cats.implicits._
-import com.softwaremill.sttp.{Request, StatusCodes, SttpBackend}
+import com.softwaremill.sttp.{StatusCodes, SttpBackend}
 import com.softwaremill.sttp.circe.{asJson => sttpAsJson}
-import gh4s.GithubClientConfig
+import gh4s.{GithubClientConfig, HttpRequest}
 import io.circe.Decoder
 
 object RequestRunner {
@@ -14,7 +14,7 @@ object RequestRunner {
       "The owner must be specified either at the request or global level when required by the API.")
 
   def asJsonK[F[_], C[_], T](
-      request: Request[String, Nothing],
+      request: HttpRequest,
       config: GithubClientConfig[_],
       mediaType: MediaType = MediaType.Default
   )(implicit F: Sync[F], C: MonoidK[C], D: Decoder[C[T]], backend: SttpBackend[F, Nothing]): F[C[T]] =
@@ -32,7 +32,7 @@ object RequestRunner {
     }
 
   def asJson[F[_], T: Decoder](
-      request: Request[String, Nothing],
+      request: HttpRequest,
       config: GithubClientConfig[_],
       mediaType: MediaType = MediaType.Default)(implicit F: Sync[F], backend: SttpBackend[F, Nothing]): F[T] =
     F.flatMap(prepare(request, config, mediaType).response(sttpAsJson[T]).send()) { response =>
@@ -48,9 +48,7 @@ object RequestRunner {
   def resolveOwner[F[_]](owner: Option[String], config: GithubClientConfig[_])(implicit F: Sync[F]): F[String] =
     owner.orElse(config.owner).map(F.pure).getOrElse(F.raiseError(ownerMissingException))
 
-  private def prepare(request: Request[String, Nothing],
-                      config: GithubClientConfig[_],
-                      mediaType: MediaType): Request[String, Nothing] = {
+  private def prepare(request: HttpRequest, config: GithubClientConfig[_], mediaType: MediaType): HttpRequest = {
     val pipeline = config.authenticator.andThen(mediaType.applyHeader)
     pipeline(request)
   }
