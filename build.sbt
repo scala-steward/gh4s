@@ -63,7 +63,7 @@ lazy val gh4s = crossProject(JVMPlatform, JSPlatform)
   .settings(
     libraryDependencies ++= Seq(
       // cats
-      "org.typelevel" %%% "cats-core"   % "1.3.1",
+      "org.typelevel" %%% "cats-core"   % "1.4.0",
       "org.typelevel" %%% "cats-effect" % "1.0.0",
       // circe
       "io.circe" %%% "circe-core"           % circeVersion,
