@@ -1,6 +1,7 @@
 package gh4s.http
 
-import com.softwaremill.sttp.{HeaderNames, Request}
+import com.softwaremill.sttp.HeaderNames
+import gh4s.HttpRequest
 
 object Authenticator {
 
@@ -20,10 +21,9 @@ object Authenticator {
       twoFactorCode.map(withBasicAuth.header("X-GitHub-OTP", _)).getOrElse(withBasicAuth)
     })
 
-  private def fromFunction[A <: Authentication](
-      f: Request[String, Nothing] => Request[String, Nothing]): Authenticator[A] =
+  private def fromFunction[A <: Authentication](f: HttpRequest => HttpRequest): Authenticator[A] =
     new Authenticator[A] {
-      override def apply(req: Request[String, Nothing]): Request[String, Nothing] = f(req)
+      override def apply(req: HttpRequest): HttpRequest = f(req)
     }
 }
-trait Authenticator[A <: Authentication] extends (Request[String, Nothing] => Request[String, Nothing])
+trait Authenticator[A <: Authentication] extends (HttpRequest => HttpRequest)

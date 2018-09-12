@@ -1,9 +1,10 @@
 package gh4s.http
 
-import com.softwaremill.sttp.{HeaderNames, Request}
+import com.softwaremill.sttp.HeaderNames
+import gh4s.HttpRequest
 
 sealed abstract class MediaType(mediaType: String) {
-  def applyHeader(request: Request[String, Nothing]): Request[String, Nothing] =
+  def applyHeader(request: HttpRequest): HttpRequest =
     request.header(HeaderNames.Accept, mediaType)
 }
 
