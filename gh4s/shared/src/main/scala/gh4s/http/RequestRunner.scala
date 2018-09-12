@@ -2,7 +2,8 @@ package gh4s.http
 
 import cats.MonoidK
 import cats.effect.Sync
-import com.softwaremill.sttp.{Request, SttpBackend}
+import cats.implicits._
+import com.softwaremill.sttp.{Request, StatusCodes, SttpBackend}
 import com.softwaremill.sttp.circe.{asJson => sttpAsJson}
 import gh4s.GithubClientConfig
 import io.circe.Decoder
@@ -18,13 +19,16 @@ object RequestRunner {
       mediaType: MediaType = MediaType.Default
   )(implicit F: Sync[F], C: MonoidK[C], D: Decoder[C[T]], backend: SttpBackend[F, Nothing]): F[C[T]] =
     F.flatMap(prepare(request, config, mediaType).response(sttpAsJson[C[T]]).send()) { response =>
-      response.body.fold(
-        _ => F.pure(C.empty[T]),
-        _.fold(
-          e => F.raiseError(e.error),
-          F.pure
+      if (response.code === StatusCodes.NotFound)
+        F.pure(C.empty[T])
+      else
+        response.body.fold(
+          msg => F.raiseError(new GithubApiException(response.code, msg)),
+          _.fold(
+            e => F.raiseError(e.error),
+            F.pure
+          )
         )
-      )
     }
 
   def asJson[F[_], T: Decoder](

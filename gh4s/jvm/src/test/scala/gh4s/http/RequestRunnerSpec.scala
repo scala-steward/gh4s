@@ -23,6 +23,12 @@ class RequestRunnerSpec extends Gh4sSpec {
       task.unsafeRunSync shouldBe None
     }
 
+    it("should raise and error if the response's status code is not a 'success' and not 404") {
+      val request = sttp.get(uri"https://api.github.com/user")
+      val task    = RequestRunner.asJsonK[Task, Option, String](request, emptyConfig)
+      task.materialize.unsafeRunSync.failure.isFailure shouldBe true
+    }
+
     it("should raise an error if deserialization fails") {
       val request = sttp.get(uri"http://example.com")
       val task    = RequestRunner.asJsonK[Task, Option, String](request, emptyConfig)
