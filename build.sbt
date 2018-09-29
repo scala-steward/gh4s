@@ -28,7 +28,7 @@ scalacOptions += {
 }
 
 lazy val circeVersion = "0.10.0"
-lazy val sttpVersion  = "1.3.3"
+lazy val sttpVersion  = "1.3.5"
 
 libraryDependencies ++= Seq(
   // cats
