@@ -83,5 +83,5 @@ lazy val gh4s = crossProject(JVMPlatform, JSPlatform)
 lazy val gh4sJVM = gh4s.jvm
 lazy val gh4sJS  = gh4s.js
 
-lazy val circeVersion = "0.10.0-M2"
+lazy val circeVersion = "0.10.0"
 lazy val sttpVersion  = "1.3.3"
