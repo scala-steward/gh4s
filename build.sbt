@@ -43,6 +43,7 @@ lazy val sharedSettings = crossCompilationSettings ++ Seq(
   wartremoverErrors in (Compile, compile) := Warts.allBut(
     Wart.DefaultArguments,
     Wart.ExplicitImplicitTypes,
+    Wart.ImplicitParameter,
     Wart.Nothing,
     Wart.PublicInference,
   ),
@@ -73,12 +74,10 @@ lazy val gh4s = crossProject(JVMPlatform, JSPlatform)
       // sttp
       "com.softwaremill.sttp" %% "core"  % sttpVersion,
       "com.softwaremill.sttp" %% "circe" % sttpVersion,
+      "com.softwaremill.sttp" %% "monix" % sttpVersion,
       // Testing
       "org.scalatest" %%% "scalatest" % "3.0.5" % "test"
     )
-  )
-  .jvmSettings(
-    libraryDependencies += "com.softwaremill.sttp" %% "okhttp-backend-monix" % sttpVersion
   )
 
 lazy val gh4sJVM = gh4s.jvm
