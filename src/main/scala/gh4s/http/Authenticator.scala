@@ -1,29 +1,36 @@
 package gh4s.http
 
-import com.softwaremill.sttp.HeaderNames
-import gh4s.HttpRequest
+import org.http4s.{BasicCredentials, Header}
+import org.http4s.headers.Authorization
 
-object Authenticator {
+private[gh4s] object Authenticator {
 
   def noop: Authenticator[Authentication.Off] =
-    fromFunction(identity)
+    new Authenticator[Authentication.Off] {
+      override val authHeaders = Nil
+    }
 
   def apiTokenAuthenticator(apiToken: String): Authenticator[Authentication.On] =
-    fromFunction(_.header(HeaderNames.Authorization, s"token $apiToken"))
+    new Authenticator[Authentication.On] {
+      override val authHeaders: List[Header] =
+        List(Header("Authorization", s"token $apiToken"))
+    }
 
   def credentialsAuthenticator(
       username: String,
       password: String,
       twoFactorCode: Option[String]
   ): Authenticator[Authentication.On] =
-    fromFunction(request => {
-      val withBasicAuth = request.auth.basic(username, password)
-      twoFactorCode.map(withBasicAuth.header("X-GitHub-OTP", _)).getOrElse(withBasicAuth)
-    })
-
-  private def fromFunction[A <: Authentication](f: HttpRequest => HttpRequest): Authenticator[A] =
-    new Authenticator[A] {
-      override def apply(req: HttpRequest): HttpRequest = f(req)
+    new Authenticator[Authentication.On] {
+      override val authHeaders: List[Header] = {
+        val headers: List[Header] = List(Authorization(BasicCredentials(username, password)))
+        twoFactorCode
+          .map(Header("X-GitHub-OTP", _) :: headers)
+          .getOrElse(headers)
+      }
     }
 }
-trait Authenticator[A <: Authentication] extends (HttpRequest => HttpRequest)
+
+private[gh4s] trait Authenticator[A <: Authentication] {
+  def authHeaders: List[Header]
+}

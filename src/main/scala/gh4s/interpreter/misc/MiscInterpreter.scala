@@ -1,13 +1,11 @@
 package gh4s.interpreter.misc
 
 import cats.effect.Sync
-import com.softwaremill.sttp.SttpBackend
 import gh4s.GithubClientConfig
 import gh4s.algebra.misc._
 
 object MiscInterpreter {
-  def apply[F[_]](config: GithubClientConfig[_])(implicit F: Sync[F],
-                                                 backend: SttpBackend[F, Nothing]): MiscAlgebra[F] =
+  def apply[F[_]: Sync](config: GithubClientConfig[F, _]): MiscAlgebra[F] =
     new MiscAlgebra[F] {
       override val codesOfConduct: CodesOfConductAlgebra[F]         = CodesOfConductInterpreter(config)
       override val emojis: EmojisAlgebra[F]                         = EmojisInterpreter(config)
