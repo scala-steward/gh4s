@@ -21,14 +21,11 @@ scalacOptions ++= Seq(
 )
 
 scalacOptions += {
-  if (priorTo2_13(scalaVersion.value))
-    "-Ypartial-unification"
-  else
-    "-Ymacro-annotations"
+  if (priorTo2_13(scalaVersion.value)) "-Ypartial-unification" else "-Ymacro-annotations"
 }
 
-lazy val circeVersion = "0.10.0"
-lazy val sttpVersion  = "1.3.3"
+lazy val circeVersion  = "0.10.0"
+lazy val http4sVersion = "0.19.0-M4"
 
 libraryDependencies ++= Seq(
   // cats
@@ -39,12 +36,12 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic"        % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,
   "io.circe" %% "circe-parser"         % circeVersion,
-  // sttp
-  "com.softwaremill.sttp" %% "core"  % sttpVersion,
-  "com.softwaremill.sttp" %% "circe" % sttpVersion,
-  "com.softwaremill.sttp" %% "monix" % sttpVersion,
+  // http4s
+  "org.http4s" %% "http4s-circe"  % http4sVersion,
+  "org.http4s" %% "http4s-client" % http4sVersion,
   // Testing
-  "org.scalatest" %% "scalatest" % "3.0.5" % "test"
+  "org.http4s"    %% "http4s-dsl" % http4sVersion % "test",
+  "org.scalatest" %% "scalatest"  % "3.0.5"       % "test",
 )
 
 libraryDependencies ++= {

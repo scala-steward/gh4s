@@ -1,31 +1,31 @@
 package gh4s
 
+import cats.data._
 import cats.effect.IO
-import com.softwaremill.sttp.impl.monix.TaskMonadAsyncError
-import com.softwaremill.sttp.testing.SttpBackendStub
-import gh4s.http.{Authentication, Authenticator}
-import monix.eval.Task
-import monix.execution.Scheduler
+import org.http4s._
+import org.http4s.client.Client
+import org.http4s.dsl.io._
 import org.scalatest._
 
-import scala.concurrent.duration.Duration
 import scala.io.Source
 
-class Gh4sSpec extends FunSpec with Matchers with OptionValues with TryValues with EitherValues {
+class Gh4sSpec extends FunSpec with Matchers with OptionValues with EitherValues {
 
-  implicit protected val scheduler = Scheduler.Implicits.global
-  protected val backendStub        = SttpBackendStub[Task, Nothing](TaskMonadAsyncError)
+  protected def newClient(routes: HttpRoutes[IO]): Client[IO] = Client.fromHttpApp(routes.orNotFound)
 
-  def newConfig[A <: Authentication](authenticator: Authenticator[A]) =
-    GithubClientConfig(None, "http://dummy.host", authenticator)
+  protected val noopClient: Client[IO] = newClient(HttpRoutes.empty[IO])
 
-  def jsonResource(resourcePath: String): String =
+  protected def jsonResponse(resourcePath: String): IO[Response[IO]] =
     IO(getClass.getClassLoader.getResourceAsStream(resourcePath))
       .map(Source.fromInputStream)
       .bracket(in => IO(in.mkString))(in => IO(in.close()))
-      .unsafeRunSync
+      .flatMap(Ok(_))
 
-  implicit class RichTask[T](task: Task[T]) {
-    def unsafeRunSync: T = task.runSyncUnsafe(Duration.Inf)
-  }
+  protected def requireHeader(header: Header)(service: HttpRoutes[IO]): HttpRoutes[IO] =
+    Kleisli { req =>
+      req.headers
+        .get(header.name)
+        .map(_ => service(req))
+        .getOrElse(OptionT.liftF(IO.pure(Response(status = Status.BadRequest))))
+    }
 }
