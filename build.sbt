@@ -35,7 +35,6 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core"           % circeVersion,
   "io.circe" %% "circe-generic"        % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,
-  "io.circe" %% "circe-parser"         % circeVersion,
   // http4s
   "org.http4s" %% "http4s-circe"  % http4sVersion,
   "org.http4s" %% "http4s-client" % http4sVersion,
