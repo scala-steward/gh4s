@@ -1,6 +1,6 @@
 name := "gh4s"
 
-scalaVersion := "2.12.6"
+scalaVersion := "2.12.7"
 crossScalaVersions ++= Seq("2.11.12" /*, "2.13.0-M4"*/ )
 
 scalafmtOnCompile := true
