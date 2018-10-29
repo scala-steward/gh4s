@@ -25,7 +25,7 @@ scalacOptions += {
 }
 
 lazy val circeVersion  = "0.10.0"
-lazy val http4sVersion = "0.19.0-M4"
+lazy val http4sVersion = "0.20.0-M1"
 
 libraryDependencies ++= Seq(
   // cats
