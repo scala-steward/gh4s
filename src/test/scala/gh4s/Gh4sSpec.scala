@@ -3,6 +3,7 @@ package gh4s
 import cats.data._
 import cats.effect.IO
 import org.http4s._
+import org.http4s.implicits._
 import org.http4s.client.Client
 import org.http4s.dsl.io._
 import org.scalatest._
