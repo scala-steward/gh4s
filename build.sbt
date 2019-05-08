@@ -1,6 +1,6 @@
 name := "gh4s"
 
-scalaVersion := "2.12.7"
+scalaVersion := "2.12.8"
 crossScalaVersions ++= Seq("2.11.12" /*, "2.13.0-M4"*/ )
 
 scalafmtOnCompile := true
@@ -38,6 +38,10 @@ libraryDependencies ++= Seq(
   // http4s
   "org.http4s" %% "http4s-circe"  % http4sVersion,
   "org.http4s" %% "http4s-client" % http4sVersion,
+  "org.http4s" %% "http4s-core"   % http4sVersion,
+  // Misc
+  "co.fs2"      %% "fs2-core"  % "1.0.4",
+  "com.chuusai" %% "shapeless" % "2.3.3",
   // Testing
   "org.http4s"    %% "http4s-dsl" % http4sVersion % "test",
   "org.scalatest" %% "scalatest"  % "3.0.7"       % "test",
