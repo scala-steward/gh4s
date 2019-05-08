@@ -59,3 +59,17 @@ def priorTo2_13(scalaVersion: String): Boolean =
     case Some((2, minor)) if minor < 13 => true
     case _                              => false
   }
+
+addCommandAlias(
+  "ci-checks",
+  List(
+    "clean",
+    "coverage",
+    "undeclaredCompileDependenciesTest",
+    "unusedCompileDependenciesTest",
+    "scalafmtSbtCheck",
+    "scalafmtCheck",
+    "test",
+    "coverageReport"
+  ).mkString(";", ";", "")
+)
