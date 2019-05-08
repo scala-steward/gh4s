@@ -16,7 +16,7 @@ cache:
 after_success: "bash <(curl -s https://codecov.io/bash)"
 
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION undeclaredCompileDependenciesTest clean coverage test coverageReport
+  - sbt ++$TRAVIS_SCALA_VERSION ci-checks
 
   # See http://www.scala-sbt.org/0.13/docs/Travis-CI-with-sbt.html
   # Tricks to avoid unnecessary cache updates
