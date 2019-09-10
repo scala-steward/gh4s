@@ -30,7 +30,7 @@ lazy val http4sVersion = "0.20.10"
 libraryDependencies ++= Seq(
   // cats
   "org.typelevel" %% "cats-core"   % "1.6.1",
-  "org.typelevel" %% "cats-effect" % "1.4.0",
+  "org.typelevel" %% "cats-effect" % "2.0.0",
   // circe
   "io.circe" %% "circe-core"           % circeVersion,
   "io.circe" %% "circe-generic"        % circeVersion,
