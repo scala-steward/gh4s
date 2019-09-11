@@ -40,7 +40,7 @@ libraryDependencies ++= Seq(
   "org.http4s" %% "http4s-client" % http4sVersion,
   "org.http4s" %% "http4s-core"   % http4sVersion,
   // Misc
-  "co.fs2"      %% "fs2-core"  % "1.0.5",
+  "co.fs2"      %% "fs2-core"  % "2.0.0",
   "com.chuusai" %% "shapeless" % "2.3.3",
   // Testing
   "org.http4s"    %% "http4s-dsl" % http4sVersion % "test",
