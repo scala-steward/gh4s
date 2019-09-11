@@ -10,20 +10,21 @@ jdk:
 cache:
   directories:
     - $HOME/.ivy2/cache
-    - $HOME/.sbt/boot
-    - $HOME/.coursier
+    - $HOME/.sbt
+    - $HOME/.cache/coursier
 
 after_success: "bash <(curl -s https://codecov.io/bash)"
 
 script:
   - sbt ++$TRAVIS_SCALA_VERSION ci-checks
 
-  # See http://www.scala-sbt.org/0.13/docs/Travis-CI-with-sbt.html
-  # Tricks to avoid unnecessary cache updates
-  - find $HOME/.sbt -name "*.lock" | xargs rm
-  - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
+before_cache:
+  # Cleanup the cached directories to avoid unnecessary cache updates
+  - rm -fv $HOME/.ivy2/.sbt.ivy.lock
+  - find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
+  - find $HOME/.sbt        -name "*.lock"               -print -delete
 
-# whitelist
+# whitelist only master branch
 branches:
   only:
     - master
