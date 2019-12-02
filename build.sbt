@@ -44,7 +44,7 @@ libraryDependencies ++= Seq(
   "com.chuusai" %% "shapeless" % "2.3.3",
   // Testing
   "org.http4s"    %% "http4s-dsl" % http4sVersion % "test",
-  "org.scalatest" %% "scalatest"  % "3.0.8"       % "test",
+  "org.scalatest" %% "scalatest"  % "3.1.0"       % "test",
 )
 
 libraryDependencies ++= {
