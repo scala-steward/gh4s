@@ -9,8 +9,10 @@ import org.http4s.dsl.io._
 import org.scalatest._
 
 import scala.io.Source
+import org.scalatest.funspec.AnyFunSpec
+import org.scalatest.matchers.should.Matchers
 
-class Gh4sSpec extends FunSpec with Matchers with OptionValues with EitherValues {
+class Gh4sSpec extends AnyFunSpec with Matchers with OptionValues with EitherValues {
 
   protected def newClient(routes: HttpRoutes[IO]): Client[IO] = Client.fromHttpApp(routes.orNotFound)
 
