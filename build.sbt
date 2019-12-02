@@ -24,7 +24,7 @@ scalacOptions += {
   if (priorTo2_13(scalaVersion.value)) "-Ypartial-unification" else "-Ymacro-annotations"
 }
 
-lazy val circeVersion  = "0.11.1"
+lazy val circeVersion  = "0.11.2"
 lazy val http4sVersion = "0.20.13"
 
 libraryDependencies ++= Seq(
