@@ -24,8 +24,8 @@ scalacOptions += {
   if (priorTo2_13(scalaVersion.value)) "-Ypartial-unification" else "-Ymacro-annotations"
 }
 
-lazy val circeVersion  = "0.11.1"
-lazy val http4sVersion = "0.20.15"
+lazy val circeVersion  = "0.11.2"
+lazy val http4sVersion = "0.20.13"
 
 libraryDependencies ++= Seq(
   // cats
@@ -44,7 +44,7 @@ libraryDependencies ++= Seq(
   "com.chuusai" %% "shapeless" % "2.3.3",
   // Testing
   "org.http4s"    %% "http4s-dsl" % http4sVersion % "test",
-  "org.scalatest" %% "scalatest"  % "3.0.8"       % "test",
+  "org.scalatest" %% "scalatest"  % "3.1.0"       % "test",
 )
 
 libraryDependencies ++= {
